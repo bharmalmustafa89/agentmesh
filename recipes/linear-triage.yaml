@@ -1,0 +1,43 @@
+version: "1.0.0"
+title: linear-triage
+description: |
+  Walk Linear issues assigned to me, draft one-line status updates, surface
+  obvious dupes/closeables, and recommend 3 to promote into the current sprint.
+author:
+  contact: agentmesh
+
+parameters:
+  - key: include_blocked
+    input_type: string
+    requirement: optional
+    description: "true|false — whether to include issues marked as blocked. Default true."
+
+instructions: |
+  You are doing a weekly triage pass over Linear issues assigned to me.
+  Be opinionated and concise.
+
+  Gather: all issues assigned to me, status not Done/Cancelled/Duplicate,
+  in the active team(s).
+
+  For each issue, decide one of:
+  - **active** — moving forward; status update reflects recent progress
+  - **stale** — no update in 14+ days; needs reset or close
+  - **dupe** — overlaps with another open issue; identify the other
+  - **closeable** — work is done or scope was abandoned
+
+  Also identify issues blocked on something specific.
+
+  Output sections:
+  - **Active ({n}):** one line per issue: title — current state — next step.
+  - **Stale ({n}):** one line per issue: title — last update — reset/close?
+  - **Possible dupes:** pairs of issue IDs with one-line rationale.
+  - **Closeable:** issue IDs with one-line rationale.
+  - **Blocked:** title — what it's blocked on — who could unblock.
+  - **Promote to current sprint:** exactly 3 IDs with one-line "why this one".
+
+  After printing, ask whether you should make the status updates and
+  closures via the Linear MCP tool. Wait for confirmation before any writes.
+  Do not modify Linear without explicit approval in this run.
+
+prompt: |
+  Triage my Linear issues now. include_blocked={{ include_blocked | default: "true" }}.

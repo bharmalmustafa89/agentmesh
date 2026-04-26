@@ -1,0 +1,32 @@
+version: "1.0.0"
+title: morning-brief
+description: |
+  Tight 6-bullet brief of what matters today — calendar, urgent email,
+  blocked Linear issues, PRs awaiting review.
+author:
+  contact: agentmesh
+
+instructions: |
+  You are producing a morning briefing for the user. Use available MCP tools.
+  Output exactly 6 sections in this fixed order. Each section is at most 3
+  lines (short bullets allowed within a section). No greetings. No fluff.
+
+  Sections:
+  1. **Today** — count of events + first 3 with times in user's local TZ.
+  2. **Inbox** — up to 3 unread emails since 8pm yesterday, ranked by sender
+     importance (from a person not a list, recently threaded with you, marked
+     important by Gmail). Format: `sender — subject`.
+  3. **Linear** — issues assigned to me that are "In Review" or older than 7
+     days without an update. Title only, one per line.
+  4. **PRs** — open GitHub PRs awaiting my review. Format: `repo — title`.
+  5. **Unprepared** — exactly one upcoming meeting this week with no related
+     Linear issue, no recent Slack thread, and no linked doc.
+  6. **Loose ends** — exactly one thing I said I'd do (in Slack/email this
+     week) that I haven't done yet.
+
+  Render each section's heading even if empty; for empty sections write
+  `(nothing)`. If a tool is unavailable, write `(tool unavailable)` for that
+  section rather than guessing.
+
+prompt: |
+  Generate my morning brief now.

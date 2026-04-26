@@ -1,0 +1,48 @@
+{
+  "$schema": "https://agentmesh.dev/schema/extensions.json",
+  "description": "MCP server manifest used by `agentmesh doctor` to validate goose config. Verified April 2026.",
+  "expected": [
+    {
+      "name": "developer",
+      "kind": "builtin",
+      "required": true,
+      "envs": [],
+      "description": "Goose's built-in shell/file/git tools."
+    },
+    {
+      "name": "linear",
+      "kind": "streamable_http",
+      "required": false,
+      "envs": [],
+      "description": "Linear official remote MCP server (OAuth in browser, no env var needed)."
+    },
+    {
+      "name": "notion",
+      "kind": "streamable_http",
+      "required": false,
+      "envs": [],
+      "description": "Notion official remote MCP server (OAuth in browser, no env var needed)."
+    },
+    {
+      "name": "github",
+      "kind": "stdio",
+      "required": false,
+      "envs": ["GITHUB_TOKEN"],
+      "description": "GitHub via official github/github-mcp-server (Docker)."
+    },
+    {
+      "name": "slack",
+      "kind": "stdio",
+      "required": false,
+      "envs": ["SLACK_XOXC_TOKEN", "SLACK_XOXD_TOKEN"],
+      "description": "Slack via korotovsky/slack-mcp-server (browser tokens, not bot tokens)."
+    },
+    {
+      "name": "gsuite",
+      "kind": "stdio",
+      "required": false,
+      "envs": [],
+      "description": "Gmail + Calendar + Drive via mcp-gsuite (uvx, OAuth via .gauth.json + .accounts.json)."
+    }
+  ]
+}

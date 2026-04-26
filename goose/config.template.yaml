@@ -1,0 +1,108 @@
+# Goose configuration template — used by `agentmesh init` when ~/.config/goose/config.yaml
+# does NOT exist. If you already have a goose config, agentmesh will not modify it;
+# hand-merge the stanzas below as needed.
+#
+# Sources verified April 2026:
+#   - Goose docs:                   https://block.github.io/goose/docs/guides/config-files
+#   - Linear MCP:                   https://linear.app/docs/mcp
+#   - Notion MCP:                   https://developers.notion.com/docs/get-started-with-mcp
+#   - GitHub MCP server:            https://github.com/github/github-mcp-server
+#   - Slack MCP (community):        https://github.com/korotovsky/slack-mcp-server
+#   - mcp-google-workspace:         https://github.com/MarkusPfundstein/mcp-gsuite
+
+GOOSE_PROVIDER: anthropic
+GOOSE_MODEL: claude-sonnet-4-6
+
+# Provider configurations. Comment out any you don't use.
+providers:
+  anthropic:
+    api_key: ${ANTHROPIC_API_KEY}
+    default_model: claude-sonnet-4-6
+    fallback_model: claude-opus-4-7
+
+  # openai:
+  #   api_key: ${OPENAI_API_KEY}
+  #   default_model: gpt-5
+
+  # ollama:
+  #   host: http://localhost:11434
+  #   default_model: qwen2.5-coder:32b
+
+# MCP extensions — uncomment what you want enabled.
+# Each extension MUST have:  type, enabled, name. Stdio also needs cmd + args.
+extensions:
+  developer:
+    type: builtin
+    name: developer
+    enabled: true
+    timeout: 60
+
+  # computercontroller:
+  #   type: builtin
+  #   name: computercontroller
+  #   enabled: false
+  #   timeout: 60
+
+  # ─── Linear (official remote, OAuth, no env var) ──────────────────────────
+  # linear:
+  #   type: streamable_http
+  #   name: linear
+  #   enabled: true
+  #   url: https://mcp.linear.app/mcp
+  #   timeout: 30
+
+  # ─── Notion (official remote, OAuth, no env var) ──────────────────────────
+  # notion:
+  #   type: streamable_http
+  #   name: notion
+  #   enabled: true
+  #   url: https://mcp.notion.com/mcp
+  #   timeout: 30
+
+  # ─── GitHub (official server, Docker required) ────────────────────────────
+  # github:
+  #   type: stdio
+  #   name: github
+  #   enabled: true
+  #   timeout: 60
+  #   cmd: docker
+  #   args:
+  #     - run
+  #     - -i
+  #     - --rm
+  #     - -e
+  #     - GITHUB_PERSONAL_ACCESS_TOKEN
+  #     - ghcr.io/github/github-mcp-server
+  #   envs:
+  #     GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_TOKEN}
+
+  # ─── Slack (community fork — uses BROWSER tokens, not bot tokens) ─────────
+  # See https://github.com/korotovsky/slack-mcp-server for how to extract xoxc/xoxd from your browser.
+  # slack:
+  #   type: stdio
+  #   name: slack
+  #   enabled: true
+  #   timeout: 60
+  #   cmd: npx
+  #   args: ["-y", "slack-mcp-server@latest"]
+  #   envs:
+  #     SLACK_MCP_XOXC_TOKEN: ${SLACK_XOXC_TOKEN}
+  #     SLACK_MCP_XOXD_TOKEN: ${SLACK_XOXD_TOKEN}
+
+  # ─── Google Workspace (Gmail + Calendar + Drive) ──────────────────────────
+  # Requires uvx (https://github.com/astral-sh/uv) and TWO files:
+  #   ~/.config/agentmesh/.gauth.json      OAuth client credentials (Desktop app)
+  #   ~/.config/agentmesh/.accounts.json   account list (per mcp-gsuite README)
+  # First run opens a browser for OAuth; subsequent runs use the cached token.
+  # gsuite:
+  #   type: stdio
+  #   name: gsuite
+  #   enabled: true
+  #   timeout: 90
+  #   cmd: uvx
+  #   args:
+  #     - mcp-gsuite
+  #     - --gauth-file
+  #     - ~/.config/agentmesh/.gauth.json
+  #     - --accounts-file
+  #     - ~/.config/agentmesh/.accounts.json

@@ -1,0 +1,40 @@
+version: "1.0.0"
+title: eod-wrap
+description: |
+  End-of-day summary: what I shipped, what changed, what's still open,
+  filed as a daily note.
+author:
+  contact: agentmesh
+
+parameters:
+  - key: notion_database_id
+    input_type: string
+    requirement: optional
+    description: Notion database ID for the daily journal. If unset, output to stdout only.
+
+instructions: |
+  Produce an end-of-day wrap-up for today. Use the user's local timezone.
+
+  Gather:
+  1. Git commits I authored today (from any repo under ~/work or
+     ~/Documents/codebase). Title + repo + branch.
+  2. PRs I opened, merged, or reviewed today (GitHub).
+  3. Linear issue status changes I made today.
+  4. Calendar events I attended (count + top 3 by importance).
+  5. Three things I said in Slack/email this week that imply follow-ups
+     I haven't done yet — surface only the highest-confidence ones.
+
+  Output sections:
+  - **Shipped today:** commits, PRs merged.
+  - **Reviewed:** PRs I touched.
+  - **Linear progress:** issues I moved or closed.
+  - **Open follow-ups:** 1-3 outstanding commitments.
+  - **Tomorrow's prep:** 1 thing I should look at first thing.
+
+  After printing the brief, if notion_database_id is provided, ASK the user
+  whether you should file this as a daily note ("Daily — YYYY-MM-DD") in that
+  database. Wait for explicit confirmation before any Notion write. Do not
+  modify Notion in this run without approval.
+
+prompt: |
+  Wrap up my day.

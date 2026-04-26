@@ -1,0 +1,55 @@
+version: "1.0.0"
+title: incident-context
+description: |
+  Compact incident-context note joining your observability tool's alert,
+  recent change events, related Slack threads, and recent commits.
+author:
+  contact: agentmesh
+
+parameters:
+  - key: alert
+    input_type: string
+    requirement: required
+    description: |
+      Incident URL, alert name, or affected entity/service name. Source can be
+      New Relic, Datadog, Sentry, PagerDuty — whatever observability MCP server
+      you have configured.
+
+  - key: hours
+    input_type: string
+    requirement: optional
+    description: Lookback window in hours. Default 6.
+
+  - key: repo
+    input_type: string
+    requirement: optional
+    description: GitHub repo (org/name) for the affected service. If omitted, infer from the entity name.
+
+instructions: |
+  You are producing an incident-context note suitable for pasting into Linear
+  or a war-room Slack thread. Be terse and concrete.
+
+  Steps:
+  1. Resolve the incident using whatever observability MCP server is available
+     (New Relic, Datadog, Sentry, etc.). If none is configured, say so under
+     "Incident:" and continue with the rest of the note from sources you do
+     have. Identify the affected entity/service if possible.
+  2. Pull supporting evidence (lookback window: {{ hours | default: 6 }} hours):
+     - Recent error groups / events for the entity (if observability tool is available).
+     - Change events (deploys, config changes) in the same window.
+     - Last 5 commits to the affected repo. Use `repo` if provided; otherwise
+       infer from the entity name and note your guess. If unsure, ask the user.
+     - Slack threads in #incidents, #ops, or #alerts mentioning the alert,
+       entity, or repo.
+
+  Output sections (skip a section if it has no data — do not pad):
+  - **Incident:** name, URL (if applicable), opened-at, current state, source tool.
+  - **Affected:** entity + service name + repo (best guess).
+  - **What changed:** deploys/config events in window.
+  - **Recent commits:** last 5 with one-line summaries.
+  - **Slack context:** 2-3 most relevant thread links.
+  - **Likely lead:** 1 sentence — your best guess at the cause based on the above.
+    If you don't have evidence for a guess, say "no clear lead from available signals."
+
+prompt: |
+  Produce the incident-context note for: {{ alert }}.

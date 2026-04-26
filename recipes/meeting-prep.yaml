@@ -1,0 +1,38 @@
+version: "1.0.0"
+title: meeting-prep
+description: |
+  Pre-meeting brief joining calendar event, attendees' open Linear issues,
+  recent Slack threads, and any docs the event references.
+author:
+  contact: agentmesh
+
+parameters:
+  - key: event
+    input_type: string
+    requirement: required
+    description: Calendar event title, ID, or "next" for the next event.
+
+instructions: |
+  You produce a one-page meeting brief. Be concrete and skim-friendly.
+
+  Steps:
+  1. Resolve the calendar event: if param is "next", pick the next event
+     starting within 24h. Otherwise match by title or ID. Print the event
+     title, time, and attendees.
+  2. For each non-organizer attendee, search Linear for open issues mentioning
+     them (assignee or comment author) updated in the last 14 days.
+  3. Search Slack for recent threads (last 7 days) in shared channels with
+     these attendees that mention the event topic or any agenda items.
+  4. Search Drive/Notion for docs the event description links to OR docs
+     last edited by an attendee that match the event title.
+
+  Output sections, in this order:
+  - **Event:** title — time — attendees
+  - **Recent context:** 3-5 bullets joining Linear issues, Slack threads,
+    and docs. Each bullet links to the source.
+  - **Open questions:** 2-3 questions you should ask in this meeting,
+    derived from gaps in the recent context.
+  - **Suggested talking points:** 3 bullets max.
+
+prompt: |
+  Build the brief for {{ event }}.
