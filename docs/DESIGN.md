@@ -106,7 +106,7 @@ each step, verify success before continuing. Never skip the verification.
 
 ## Prerequisites to verify
 - Node 20+ available: `node --version`
-- Goose installed: `goose --version` — if missing, `brew install block-goose`
+- Goose installed: `goose --version` — if missing, `brew install block-goose-cli`
 - The user's API keys (ANTHROPIC_API_KEY at minimum). If not in env or
   ~/.config/agentmesh/.env, ASK the user before continuing. Never invent values.
 

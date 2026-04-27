@@ -17,12 +17,12 @@ const hasOnly = (...names) => (cmd) => names.includes(cmd)
 
 const CANONICAL_INSTALL_URL = 'https://github.com/block/goose/releases/download/stable/download_cli.sh'
 
-test('darwin with brew available → strategy is `brew install block-goose`', () => {
+test('darwin with brew available → strategy is `brew install block-goose-cli`', () => {
   const s = detectInstallStrategy({ platform: 'darwin', hasCommand: hasOnly('brew') })
   assert.equal(s.available, true)
   assert.equal(s.cmd, 'brew')
-  assert.deepEqual(s.args, ['install', 'block-goose'])
-  assert.match(s.description, /brew install block-goose/)
+  assert.deepEqual(s.args, ['install', 'block-goose-cli'])
+  assert.match(s.description, /brew install block-goose-cli/)
 })
 
 test('darwin without brew → unavailable; null cmd/args; manual hint in description', () => {

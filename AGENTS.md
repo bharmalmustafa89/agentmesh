@@ -8,7 +8,7 @@ You are setting up `agentmesh` for the current user. Follow steps in order. Afte
 
 - **Node 20+:** `node --version`. If older, instruct the user to upgrade (`nvm install 20 && nvm use 20`) and stop.
 - **Goose CLI:** `goose --version`. If missing:
-  - macOS: `brew install block-goose`
+  - macOS: `brew install block-goose-cli` (note the `-cli` suffix — the unsuffixed cask is the GUI app)
   - Linux: `curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | bash`
   - Reference: https://block.github.io/goose/docs/getting-started/installation
 - **At least one provider:** `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, or `GOOGLE_API_KEY` in shell env or `~/.config/agentmesh/.env`. Ollama running locally on `:11434` also satisfies this. If none are set and the user has not started Ollama, ask the user before continuing. Never invent values.

@@ -10,7 +10,7 @@ npx agentmesh init
 
 That's it. `agentmesh init` checks Goose, copies recipes to `~/.config/agentmesh/recipes/`, and prompts for your Anthropic API key if it's not already set. Run `agentmesh doctor` afterwards to verify your setup.
 
-> **Prerequisites:** Node 20+, [Goose CLI](https://block.github.io/goose/docs/getting-started/installation) (`brew install block-goose`), and an `ANTHROPIC_API_KEY` (or use Ollama for local-only).
+> **Prerequisites:** Node 20+, [Goose CLI](https://block.github.io/goose/docs/getting-started/installation) (`brew install block-goose-cli` on macOS — note the `-cli` suffix; the unsuffixed cask is the desktop GUI app), and an `ANTHROPIC_API_KEY` (or use Ollama for local-only).
 
 ## Usage
 

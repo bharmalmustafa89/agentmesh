@@ -10,7 +10,8 @@ parameters:
   - key: include_blocked
     input_type: string
     requirement: optional
-    description: "true|false — whether to include issues marked as blocked. Default true."
+    default: "true"
+    description: "true|false — whether to include issues marked as blocked."
 
 instructions: |
   You are doing a weekly triage pass over Linear issues assigned to me.
@@ -40,4 +41,4 @@ instructions: |
   Do not modify Linear without explicit approval in this run.
 
 prompt: |
-  Triage my Linear issues now. include_blocked={{ include_blocked | default: "true" }}.
+  Triage my Linear issues now. include_blocked={{ include_blocked }}.
