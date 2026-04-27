@@ -52,4 +52,7 @@ instructions: |
   surfaced — print the error and stop. Do not invent values.
 
 prompt: |
-  Run the hello recipe now.
+  Begin. Gather the signals listed in the instructions above (whoami, pwd, git
+  state) using the shell tool, then render the three-section output exactly
+  as specified. Do NOT invoke `agentmesh` itself — you are agentmesh's hello
+  recipe right now, and calling it would loop.
