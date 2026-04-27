@@ -18,12 +18,14 @@ parameters:
   - key: hours
     input_type: string
     requirement: optional
-    description: Lookback window in hours. Default 6.
+    default: "6"
+    description: Lookback window in hours.
 
   - key: repo
     input_type: string
     requirement: optional
-    description: GitHub repo (org/name) for the affected service. If omitted, infer from the entity name.
+    default: ""
+    description: GitHub repo (org/name) for the affected service. Empty = infer from the entity name.
 
 instructions: |
   You are producing an incident-context note suitable for pasting into Linear
@@ -34,7 +36,7 @@ instructions: |
      (New Relic, Datadog, Sentry, etc.). If none is configured, say so under
      "Incident:" and continue with the rest of the note from sources you do
      have. Identify the affected entity/service if possible.
-  2. Pull supporting evidence (lookback window: {{ hours | default: 6 }} hours):
+  2. Pull supporting evidence (lookback window: {{ hours }} hours):
      - Recent error groups / events for the entity (if observability tool is available).
      - Change events (deploys, config changes) in the same window.
      - Last 5 commits to the affected repo. Use `repo` if provided; otherwise
@@ -52,4 +54,4 @@ instructions: |
     If you don't have evidence for a guess, say "no clear lead from available signals."
 
 prompt: |
-  Produce the incident-context note for: {{ alert }}.
+  Produce the incident-context note for: {{ alert }}. Affected repo (if known): {{ repo }}.

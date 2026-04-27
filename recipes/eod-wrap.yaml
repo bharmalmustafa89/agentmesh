@@ -6,12 +6,6 @@ description: |
 author:
   contact: agentmesh
 
-parameters:
-  - key: notion_database_id
-    input_type: string
-    requirement: optional
-    description: Notion database ID for the daily journal. If unset, output to stdout only.
-
 instructions: |
   Produce an end-of-day wrap-up for today. Use the user's local timezone.
 
@@ -31,10 +25,10 @@ instructions: |
   - **Open follow-ups:** 1-3 outstanding commitments.
   - **Tomorrow's prep:** 1 thing I should look at first thing.
 
-  After printing the brief, if notion_database_id is provided, ASK the user
-  whether you should file this as a daily note ("Daily — YYYY-MM-DD") in that
-  database. Wait for explicit confirmation before any Notion write. Do not
-  modify Notion in this run without approval.
+  After printing the brief, ask the user whether you should file this as a
+  daily note in Notion ("Daily — YYYY-MM-DD"). If they say yes, ask for the
+  database ID. Wait for explicit confirmation before any Notion write. Do
+  not modify Notion in this run without approval.
 
 prompt: |
   Wrap up my day.

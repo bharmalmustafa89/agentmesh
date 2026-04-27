@@ -10,7 +10,8 @@ author:
 # the user has external MCP servers globally enabled. This is the load-bearing
 # guarantee of "zero-config" — without it we'd rely on the model to abstain.
 extensions:
-  - developer
+  - type: builtin
+    name: developer
 
 instructions: |
   You are confirming agentmesh is wired up correctly. Use ONLY the built-in

@@ -10,12 +10,14 @@ parameters:
   - key: pr
     input_type: string
     requirement: optional
-    description: PR number. If unset, uses the current branch's PR or unmerged diff.
+    default: ""
+    description: PR number. Empty = uses the current branch's PR or unmerged diff.
 
   - key: repo
     input_type: string
     requirement: optional
-    description: Path to the git repo. Defaults to current working directory.
+    default: ""
+    description: Path to the git repo. Empty = current working directory.
 
 instructions: |
   You are drafting a pull request description. Be concrete; do not embellish.
@@ -54,4 +56,4 @@ instructions: |
   Do not invent issues. If no Linear link is confidently found, omit the footer.
 
 prompt: |
-  Draft the PR description for {{ pr | default: "current branch" }} in {{ repo | default: "the current repo" }}.
+  Draft the PR description for PR={{ pr }} in repo={{ repo }} (empty values mean "use the current branch / repo").

@@ -127,10 +127,14 @@ test('hello recipe is zero-config (no required params, no external MCP servers)'
   // builtin. This is what physically prevents goose from loading external
   // MCP servers at runtime — without it we'd be relying on the agent to
   // abstain at prompt level, which is not a guarantee.
-  assert.ok(r.extensions, 'hello: must declare `extensions:` explicitly to pin built-ins only')
-  const declared = Array.isArray(r.extensions) ? r.extensions : Object.keys(r.extensions)
-  assert.deepEqual(declared, ['developer'],
-    `hello: extensions must be exactly ["developer"], got ${JSON.stringify(declared)}`)
+  // Goose recipe schema requires each extension to be an object with `type`
+  // and `name` (NOT a bare string — `goose recipe validate` rejects strings).
+  assert.ok(Array.isArray(r.extensions),
+    'hello: must declare `extensions:` as a YAML list of {type,name} objects')
+  assert.equal(r.extensions.length, 1, `hello: must declare exactly 1 extension, got ${r.extensions.length}`)
+  const ext = r.extensions[0]
+  assert.equal(ext.type, 'builtin', `hello: extension type must be "builtin", got ${ext.type}`)
+  assert.equal(ext.name, 'developer', `hello: extension name must be "developer", got ${ext.name}`)
 
   // Defense-in-depth: scan instructions+prompt for unambiguous external
   // service names. Generic English words (linear, calendar, drive, notion as
@@ -144,6 +148,25 @@ test('hello recipe is zero-config (no required params, no external MCP servers)'
     const re = new RegExp(`(^|\\b)${escaped}(\\b|$)`, 'i')
     assert.ok(!re.test(haystack),
       `hello: text references external service "${svc}" — would require MCP auth, breaking zero-config`)
+  }
+})
+
+test('every bundled recipe passes `goose recipe validate` (skipped if goose not installed)', async (t) => {
+  // Integration check against the real goose binary, which catches schema
+  // mismatches that pure YAML parsing misses (e.g. `extensions: - developer`
+  // is valid YAML but rejected by goose). Skipped on machines without goose
+  // so the test suite stays runnable; CI should ensure goose is installed.
+  const goose = spawnSync('command', ['-v', 'goose'], { encoding: 'utf8' })
+  if (goose.status !== 0) {
+    t.skip('goose CLI not installed — skipping schema validation against the real binary')
+    return
+  }
+  const dir = join(ROOT, 'recipes')
+  const files = (await readdir(dir)).filter(f => f.endsWith('.yaml'))
+  for (const file of files) {
+    const result = spawnSync('goose', ['recipe', 'validate', join(dir, file)], { encoding: 'utf8', timeout: 5_000 })
+    assert.equal(result.status, 0,
+      `goose recipe validate ${file} failed:\n  stdout: ${result.stdout}\n  stderr: ${result.stderr}`)
   }
 })
 
