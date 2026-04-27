@@ -1,0 +1,54 @@
+version: "1.0.0"
+title: hello
+description: |
+  Zero-config first-run recipe. Verifies your install works without needing
+  any external integrations. Uses only Goose's built-in developer extension.
+author:
+  contact: agentmesh
+
+# Pin extensions explicitly so this recipe runs with built-ins only, even if
+# the user has external MCP servers globally enabled. This is the load-bearing
+# guarantee of "zero-config" — without it we'd rely on the model to abstain.
+extensions:
+  - developer
+
+instructions: |
+  You are confirming agentmesh is wired up correctly. Use ONLY the built-in
+  developer extension (shell, filesystem, git). Do not attempt any external
+  integration.
+
+  First, gather these signals via shell. If a command errors for a normal
+  reason (not in a git repo, etc.), record that as the value — do NOT stop.
+  - whoami_user      = output of `whoami`
+  - cwd              = output of `pwd`
+  - in_git           = "yes" if `git rev-parse --is-inside-work-tree 2>/dev/null` outputs `true`, else "no"
+  - branch           = output of `git branch --show-current 2>/dev/null` (may be empty)
+  - is_default_branch = "yes" if branch == "main" or "master", else "no"
+
+  Then output exactly this format. Render it verbatim, replacing the
+  `<placeholders>` with the gathered values. No greetings or commentary.
+
+  ```
+  ### You
+  - user: <whoami_user>
+  - cwd: <cwd>
+  - in git repo: <in_git>
+
+  ### Setup
+  - model: <the model you are running as, in plain words>
+  - example tool: developer.shell
+
+  ### Try next
+  <ONE command, picked by the rule below>
+  ```
+
+  Rule for the "Try next" line — pick exactly ONE:
+  - If `in_git` is "no": output `agentmesh doctor`
+  - Else if `is_default_branch` is "yes": output `agentmesh run eod-wrap`
+  - Else: output `agentmesh run pr-describe`
+
+  Real tool errors (e.g. `whoami` failing) are not normal and should be
+  surfaced — print the error and stop. Do not invent values.
+
+prompt: |
+  Run the hello recipe now.

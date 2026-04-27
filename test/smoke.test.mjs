@@ -100,6 +100,53 @@ test('AGENTS.md and CLAUDE.md have identical content', async () => {
   assert.equal(a, c, 'AGENTS.md and CLAUDE.md must be in sync (one is the canonical source)')
 })
 
+test('hello recipe is zero-config (no required params, no external MCP servers)', async () => {
+  // The hello recipe must work for a brand-new user with NO MCP credentials.
+  // Asserts: file exists, parses, has no required parameters, references only
+  // built-in goose tools, and does NOT mention external services that would
+  // require auth.
+  const path = join(ROOT, 'recipes', 'hello.yaml')
+  assert.ok(existsSync(path), 'recipes/hello.yaml must exist')
+  const r = YAML.parse(await readFile(path, 'utf8'))
+
+  assert.equal(r.title, 'hello')
+  assert.ok(r.description, 'hello: missing description')
+  assert.ok(r.instructions, 'hello: missing instructions')
+  assert.ok(r.prompt, 'hello: missing prompt')
+
+  // Zero-config: no required parameters. Optional params are fine; the recipe
+  // must work with no args.
+  if (r.parameters) {
+    for (const p of r.parameters) {
+      assert.notEqual(p.requirement, 'required',
+        `hello: parameter ${p.key} is required, but hello must be zero-config`)
+    }
+  }
+
+  // LOAD-BEARING: extensions must be explicitly pinned to the developer
+  // builtin. This is what physically prevents goose from loading external
+  // MCP servers at runtime — without it we'd be relying on the agent to
+  // abstain at prompt level, which is not a guarantee.
+  assert.ok(r.extensions, 'hello: must declare `extensions:` explicitly to pin built-ins only')
+  const declared = Array.isArray(r.extensions) ? r.extensions : Object.keys(r.extensions)
+  assert.deepEqual(declared, ['developer'],
+    `hello: extensions must be exactly ["developer"], got ${JSON.stringify(declared)}`)
+
+  // Defense-in-depth: scan instructions+prompt for unambiguous external
+  // service names. Generic English words (linear, calendar, drive, notion as
+  // noun) are NOT in the blocklist because they produce too many false
+  // positives. The extensions pin above is the actual guarantee; this scan
+  // catches obvious authoring mistakes only.
+  const haystack = `${r.instructions}\n${r.prompt}`.toLowerCase()
+  const unambiguous = ['gmail', 'gcal', 'gsuite', 'pagerduty', 'datadog', 'new relic', 'sentry']
+  for (const svc of unambiguous) {
+    const escaped = svc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+')
+    const re = new RegExp(`(^|\\b)${escaped}(\\b|$)`, 'i')
+    assert.ok(!re.test(haystack),
+      `hello: text references external service "${svc}" — would require MCP auth, breaking zero-config`)
+  }
+})
+
 test('all recipes referenced in README exist', async () => {
   const readme = await readFile(join(ROOT, 'README.md'), 'utf8')
   const recipeRefs = [...readme.matchAll(/agentmesh run (\w[\w-]+)/g)].map(m => m[1])

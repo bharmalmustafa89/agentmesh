@@ -16,21 +16,31 @@ That's it. `agentmesh init` checks Goose, copies recipes to `~/.config/agentmesh
 
 ```sh
 agentmesh list                       # Show available recipes
-agentmesh run morning-brief          # Tight 6-bullet brief of what matters today
+agentmesh run hello                  # Zero-config smoke test (no MCP creds needed)
+agentmesh run morning-brief          # Tight brief of what matters today
 agentmesh run pr-describe --pr 803   # Draft a PR description from a diff
 agentmesh doctor                     # Health-check providers, MCP servers, env vars
 ```
 
+After install, the fastest way to verify everything is wired:
+
+```sh
+agentmesh run hello
+```
+
+It uses only Goose's built-in developer tools — no Gmail/Linear/etc. setup required.
+
 ## Recipes shipped in v0
 
-| Recipe | What it does |
-|---|---|
-| `morning-brief` | Calendar + urgent email + blocked Linear + PRs awaiting review |
-| `meeting-prep` | Pre-meeting brief joining calendar, attendees' Linear issues, Slack threads, docs |
-| `eod-wrap` | End-of-day summary: shipped, reviewed, Linear progress, follow-ups, tomorrow's prep |
-| `pr-describe` | Draft a PR description from a git diff in Summary / Why / Test plan format |
-| `incident-context` | Compact incident note joining New Relic + change events + commits + Slack |
-| `linear-triage` | Weekly triage of Linear issues — active/stale/dupes/closeable + 3 to promote |
+| Recipe | What it does | External integrations |
+|---|---|---|
+| `hello` | Zero-config first-run smoke test | None — built-ins only |
+| `morning-brief` | Calendar + urgent email + blocked Linear + PRs awaiting review | Gmail, GCal, Linear, GitHub |
+| `meeting-prep` | Pre-meeting brief joining calendar, attendees' Linear issues, Slack threads, docs | GCal, Linear, Slack, Drive/Notion |
+| `eod-wrap` | End-of-day summary: shipped, reviewed, Linear progress, follow-ups, tomorrow's prep | Git, Linear, GitHub, GCal, Notion |
+| `pr-describe` | Draft a PR description from a git diff in Summary / Why / Test plan format | Git, Linear |
+| `incident-context` | Compact incident note joining observability + commits + Slack | Observability tool, Git, Slack |
+| `linear-triage` | Weekly triage of Linear issues — active/stale/dupes/closeable + 3 to promote | Linear |
 
 ## How it works
 
