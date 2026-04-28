@@ -11,7 +11,9 @@
     "lib",
     "goose",
     "recipes",
-    "docs",
+    "docs/adding-recipes.md",
+    "docs/byo-mcp.md",
+    "docs/usage.md",
     "AGENTS.md",
     "CLAUDE.md",
     "README.md",
@@ -29,9 +31,21 @@
     "agent",
     "ai",
     "cli",
-    "workflow"
+    "workflow",
+    "recipes",
+    "anthropic",
+    "claude"
   ],
   "license": "MIT",
+  "author": "Mustafa Bharmal <bharmalmustafa89@gmail.com>",
+  "homepage": "https://github.com/bharmalmustafa89/agentmesh#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bharmalmustafa89/agentmesh.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bharmalmustafa89/agentmesh/issues"
+  },
   "dependencies": {
     "yaml": "^2.8.3"
   }

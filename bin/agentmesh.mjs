@@ -20,7 +20,7 @@ Usage:
   agentmesh --version
   agentmesh --help
 
-Docs: https://github.com/mustafabharmal/agentmesh
+Docs: https://github.com/bharmalmustafa89/agentmesh
 `
 
 async function main() {

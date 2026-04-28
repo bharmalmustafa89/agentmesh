@@ -52,8 +52,18 @@ test('package.json is well-formed and lists required fields', async () => {
   assert.ok(pkg.version)
   assert.ok(pkg.bin?.agentmesh)
   assert.ok(pkg.engines?.node)
-  assert.ok(Array.isArray(pkg.files) && pkg.files.includes('docs'))
+  assert.ok(Array.isArray(pkg.files))
+  // Must ship at least the bundled documentation that README links to.
+  // Either a `docs` entry (whole dir) or each linked file individually is fine.
+  const hasDocs = pkg.files.includes('docs') ||
+    pkg.files.some(f => f === 'docs/adding-recipes.md') ||
+    pkg.files.some(f => f === 'docs/byo-mcp.md')
+  assert.ok(hasDocs, 'package files must include the user-facing docs (README links to them)')
   assert.ok(pkg.dependencies?.yaml)
+  // npm-trust fields — present after Codex review.
+  assert.ok(pkg.author, 'package must declare author for npm trust')
+  assert.ok(pkg.repository?.url, 'package must declare repository.url')
+  assert.ok(pkg.bugs?.url, 'package must declare bugs.url')
 })
 
 test('bundled goose template parses as YAML', async () => {
