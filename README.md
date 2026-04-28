@@ -22,6 +22,14 @@ agentmesh run pr-describe --pr 803   # Draft a PR description from a diff
 agentmesh doctor                     # Health-check providers, MCP servers, env vars
 ```
 
+Recipe parameters can be passed in any of these forms — they all translate to Goose's `--params key=value`:
+
+```sh
+agentmesh run pr-describe --pr 803
+agentmesh run pr-describe --pr=803
+agentmesh run pr-describe --params pr=803
+```
+
 After install, the fastest way to verify everything is wired:
 
 ```sh
