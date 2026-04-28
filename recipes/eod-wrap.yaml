@@ -7,28 +7,38 @@ author:
   contact: agentmesh
 
 instructions: |
-  Produce an end-of-day wrap-up for today. Use the user's local timezone.
+  Produce an end-of-day wrap-up for today. Use the user's local timezone
+  (detect with `date` if unknown; otherwise label all times as UTC).
 
-  Gather:
-  1. Git commits I authored today (from any repo under ~/work or
-     ~/Documents/codebase). Title + repo + branch.
-  2. PRs I opened, merged, or reviewed today (GitHub).
-  3. Linear issue status changes I made today.
-  4. Calendar events I attended (count + top 3 by importance).
-  5. Three things I said in Slack/email this week that imply follow-ups
-     I haven't done yet — surface only the highest-confidence ones.
+  Gather (skip any source whose tool is unavailable — write `(tool
+  unavailable)` and continue, do not guess):
 
-  Output sections:
+  1. Git commits I authored today. Default to the current working directory's
+     git repo. If you have access to a list of common repo paths (e.g. parent
+     directory contains other git repos), scan them too. If running outside a
+     git repo, ask the user which repos to scan.
+  2. PRs I opened, merged, or reviewed today. Use the GitHub MCP if available;
+     fall back to `gh pr list --author @me --state all` and similar shell
+     commands if `gh` is on PATH.
+  3. Linear issue status changes I made today. Skip if no Linear MCP.
+  4. Calendar events I attended (count + top 3 by importance). Skip if no
+     calendar MCP.
+  5. Three things I said in Slack/email this week that imply follow-ups I
+     haven't done yet. Skip entirely if neither Slack nor email MCP is
+     available — do not invent follow-ups.
+
+  Output sections (omit a section that has no data; do not pad):
   - **Shipped today:** commits, PRs merged.
   - **Reviewed:** PRs I touched.
   - **Linear progress:** issues I moved or closed.
   - **Open follow-ups:** 1-3 outstanding commitments.
   - **Tomorrow's prep:** 1 thing I should look at first thing.
 
-  After printing the brief, ask the user whether you should file this as a
-  daily note in Notion ("Daily — YYYY-MM-DD"). If they say yes, ask for the
-  database ID. Wait for explicit confirmation before any Notion write. Do
-  not modify Notion in this run without approval.
+  After printing the brief, IF a Notion MCP is available, ask the user whether
+  to file this as a daily note ("Daily — YYYY-MM-DD"). If they say yes, ask
+  for the database ID. Wait for explicit confirmation before any Notion
+  write. Do not modify Notion without approval. If no Notion MCP is
+  available, skip this step silently.
 
 prompt: |
   Wrap up my day.

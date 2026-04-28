@@ -22,6 +22,14 @@ agentmesh run pr-describe --pr 803   # Draft a PR description from a diff
 agentmesh doctor                     # Health-check providers, MCP servers, env vars
 ```
 
+Recipe parameters can be passed in any of these forms — they all translate to Goose's `--params key=value`:
+
+```sh
+agentmesh run pr-describe --pr 803
+agentmesh run pr-describe --pr=803
+agentmesh run pr-describe --params pr=803
+```
+
 After install, the fastest way to verify everything is wired:
 
 ```sh
@@ -72,9 +80,13 @@ It uses only Goose's built-in developer tools — no Gmail/Linear/etc. setup req
 
 Paste this into Claude Code or Codex CLI:
 
-> Set up agentmesh from `https://github.com/mustafabharmal/agentmesh`. Read `AGENTS.md` and follow the steps. Stop and ask me if any verification fails.
+> Set up agentmesh from `https://github.com/bharmalmustafa89/agentmesh`. Read `AGENTS.md` and follow the steps. Stop and ask me if any verification fails.
 
 The agent reads [`AGENTS.md`](./AGENTS.md), runs the install steps deterministically, and asks for any missing credentials. No manual config editing.
+
+## Daily use
+
+See [docs/usage.md](./docs/usage.md) for concrete daily/weekly workflows: morning brief, end-of-day wrap, meeting prep, PR description drafting, incident response, weekly Linear triage, plus cost estimates and a 14-day experiment plan.
 
 ## Adding your own recipes
 

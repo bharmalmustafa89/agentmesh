@@ -24,14 +24,22 @@ instructions: |
 
   Steps:
   1. Resolve the diff:
-     - If `pr` is set, use `gh pr diff <pr>` to fetch.
+     - If `pr` is set, use `gh pr diff <pr>` to fetch (requires `gh` CLI; if
+       not authenticated, run `gh auth status` and surface the error).
      - Otherwise use the current branch's diff against the merge-base with
-       the default branch (main or master).
-  2. Identify the related Linear issue:
-     - Branch name pattern: `<user>/<issue-id>-<slug>` or
-       `<user>/<descriptive>` linking to issue via commit messages.
-     - Search Linear for an issue whose ID appears in any commit message
-       on the branch.
+       the default branch. Find the default branch via
+       `git symbolic-ref refs/remotes/origin/HEAD` (returns
+       `refs/remotes/origin/<branch>`); fall back to `main`, then `master`,
+       in that order if the symbolic-ref command fails.
+  2. Identify the related Linear issue, in this order of preference:
+     - An issue ID (e.g. `ENG-1234`) appears in any commit message on the
+       branch — most reliable signal.
+     - The branch name contains a Linear issue ID slug (common patterns:
+       `<user>/<issue-id>-<slug>`, `<issue-id>-<slug>`, or
+       `feat/<issue-id>-...`).
+     - Search Linear for an open issue whose title closely matches the
+       branch name or commit subject.
+     - Linear MCP unavailable: skip this step and omit the footer.
   3. Read the diff carefully. Identify: behavior change, files touched,
      any tests added/modified.
 
